@@ -160,23 +160,39 @@
               offset: { y: -0.25 }
             })
 
-
+/////////////////////////////////
                   /*
               player stats
               */
              var this_ = this
               var opt= {
+
+                hunger:{
+                  level:10,
+                  min_level:0,
+                  oscillation:1000,
+                  functions:{
+                  _default:function(stat){
+                    if(stat.level > stat.min_level)
+                    {
+                        stat.level-= 1 
+                    }
+                    
+                    
+                  },
                   0:function()
                   {
                
                     this_.man.animation.play('driving')
                   }
               }
-              console.log('sssssssssss')
+            }
+
+          }
               var test = new stats_survival('a1',opt)
-                  test.hunger()
+                  test.stats_run()
 
-
+////////////////////////////////////
 
 
             this.man.body.setFriction(0.8)

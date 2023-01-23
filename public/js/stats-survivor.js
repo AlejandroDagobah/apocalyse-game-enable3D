@@ -5,14 +5,37 @@ class stats_survival {
         this.id = id
         this.opt = opt
     }
-    hunger(){
+    stats_run(){
 
+
+        for (const stat_name in this.opt) 
+        {
+            var stat = this.opt[stat_name]
+           
+            this.create_ui(this.id)
+            
+            setInterval(() => 
+            {
+                stat.functions._default(stat)
+               
+                if(stat.functions[stat.level] != undefined)
+                {
+                    stat.functions[stat.level]()
+                }
+
+                this.update_ui(this.id,stat.level)
+            },stat.oscillation)
+
+
+        }
+/*
         this.create_ui(this.id)
+
 
         setInterval(() => 
         {
               this.hunger_level-=1      
-              this.update_ui(this.id,this.hunger_level)
+             
                 
               if(this.opt[this.hunger_level] != undefined)
               {
@@ -22,7 +45,7 @@ class stats_survival {
              
 
             
-        }, 1000);
+        }, 1000);*/
     } 
     create_ui(id){
         
