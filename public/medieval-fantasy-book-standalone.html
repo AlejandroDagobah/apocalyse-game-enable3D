@@ -10,7 +10,10 @@
     <title>Medieval Fantasy Book</title>
   <!--  <link rel="stylesheet" href="/css/examples.css?ver=1.0.0" />
     <script src="/js/examples.js?ver=1.1.1"></script>-->
+    <script src="/js/stats-survivor.js"></script>
     <script src="/js/enable3d.framework.0.25.3.min.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
   </head>
 
   <body>
@@ -210,6 +213,42 @@
               width: 0.5,
               offset: { y: -0.25 }
             })
+
+/////////////////////////////////
+                  /*
+              player stats
+              */
+             var this_ = this
+              var opt= {
+
+                hunger:{
+                  level:10,
+                  min_level:0,
+                  oscillation:1000,
+                  functions:{
+                  _default:function(stat){
+                    if(stat.level > stat.min_level)
+                    {
+                        stat.level-= 1 
+                    }
+                    
+                    
+                  },
+                  0:function()
+                  {
+               
+                    this_.man.animation.play('driving')
+                  }
+              }
+            }
+
+          }
+              var test = new stats_survival('a1',opt)
+                  test.stats_run()
+
+////////////////////////////////////
+
+
             this.man.body.setFriction(0.8)
             this.man.body.setAngularFactor(0, 0, 0)
 
@@ -369,7 +408,10 @@
              */
             if (this.keys.space.isDown && this.canJump) {
               this.jump()
+
+            
             }
+        
           }
         }
       }
@@ -386,4 +428,5 @@
       })
     </script>
   </body>
+
 </html>
