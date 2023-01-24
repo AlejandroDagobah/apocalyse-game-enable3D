@@ -69,6 +69,7 @@
         }
 
         async create() {
+
           const { lights } = await this.warpSpeed('-ground', '-orbitControls')
           const { hemisphereLight, ambientLight, directionalLight } = lights
           const intensity = 0.65
@@ -101,7 +102,7 @@
           })
         
       
-          const addTown = async () =>{
+          const addTown = async () => {
             const object = await this.load.gltf('town')
             const scene = object.scenes[0]
 
@@ -132,46 +133,7 @@
 
           }
 
-          const addBook = async () => {
-            const object = await this.load.gltf('book')
-            const scene = object.scenes[0]
-
-            const book = new ExtendedObject3D()
-            book.name = 'scene'
-            book.add(scene)
-            this.add.existing(book)
-
-            // add animations
-            // sadly only the flags animations works
-            object.animations.forEach((anim, i) => {
-              book.mixer = this.animationMixers.create(book)
-              // overwrite the action to be an array of actions
-              book.action = []
-              book.action[i] = book.mixer.clipAction(anim)
-              book.action[i].play()
-            })
-
-            book.traverse(child => {
-              if (child.isMesh) {
-                child.castShadow = child.receiveShadow = false
-                child.material.metalness = 0
-                child.material.roughness = 1
-
-                if (/mesh/i.test(child.name)) {
-                  this.physics.add.existing(child, {
-                    shape: 'concave',
-                    mass: 0,
-                    collisionFlags: 1,
-                    autoCenter: false
-                  })
-                  child.body.setAngularFactor(0, 0, 0)
-                  child.body.setLinearFactor(0, 0, 0)
-                }
-              }
-            })
-
-
-          }
+          
           const addMan = async () => {
             const object = await this.load.gltf('man')
             const man = object.scene.children[0]
