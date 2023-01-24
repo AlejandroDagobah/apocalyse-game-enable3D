@@ -14,7 +14,6 @@
   </head>
 
   <body>
-    <div id="info-text">Use WASD, SPACE and your Mouse.<br />Try to play it on your mobile device :)</div>
     <script>
       const {
         Project,
@@ -54,28 +53,81 @@
            * https://sketchfab.com/3d-models/medieval-fantasy-book-06d5a80a04fc4c5ab552759e9a97d91a
            * Attribution 4.0 International (CC BY 4.0)
            */
-          const book = this.load.preload('book', '/assets/book.glb')
-
+          const book = this.load.preload('book', '/assets/glb/book.glb')
+          const town = this.load.preload('town', '/assets/glb/town.glb')
           /**
            * box_man.glb by Jan Bláha
            * https://github.com/swift502/Sketchbook
            * CC-0 license 2018
            */
-          const man = this.load.preload('man', '/assets/box_man.glb')
+          const man = this.load.preload('man', '/assets/glb/box_man.glb')
 
-          await Promise.all([book, man])
+          await Promise.all([town, man])
         }
 
         async create() {
           const { lights } = await this.warpSpeed('-ground', '-orbitControls')
-
           const { hemisphereLight, ambientLight, directionalLight } = lights
           const intensity = 0.65
           hemisphereLight.intensity = intensity
           ambientLight.intensity = intensity
           directionalLight.intensity = intensity
 
+
+          const grass = await this.load.texture('/assets/img/grass.jpg')
+          grass.wrapS = THREE.RepeatWrapping
+          grass.wrapT = THREE.RepeatWrapping
+          grass.repeat.set(15,15)
+
+          
           // this.physics.debug.enable()
+          this.load.texture('/assets/heightmap/heightmap-island-2.png').then(heightmap => {
+            const mesh = this.heightMap.add(heightmap)
+            if(mesh){
+              mesh.material = new THREE.MeshPhongMaterial({map: grass})
+              mesh.scale.set(60, 60, 20)
+
+
+              mesh.castShadow = mesh.receiveShadow = false
+              mesh.material.metalness = 0
+              mesh.material.roughness = 1
+
+              this.physics.add.existing(mesh, {mass: 0, collisionFlags: 1})
+              mesh.position.set(0, 0, 0)
+            }
+          })
+        
+      
+          const addTown = async () =>{
+            const object = await this.load.gltf('town')
+            const scene = object.scenes[0]
+
+            const town = new ExtendedObject3D()
+            town.name = 'town'
+            town.add(scene)
+            this.add.existing(town)
+
+            town.traverse(child => {
+              if(child.isMesh){
+                child.castShadow = child.receiveShadow = false
+                child.material.metalness = 0
+                child.material.roughness = 1
+
+                if(/scene/i.test(child.name)){
+                  this.physics.add.existing(child, {
+                    shape: 'concave',
+                    mass: 0,
+                    collisionFlags: 1,
+                    autoCenter: false
+                  })
+                  child.body.setAngularFactor(0,0,0) 
+                  child.body.setLinearFactor(0,0,0) 
+                }
+              }
+            })
+            this.town.position.set(0, 10, 0)
+
+          }
 
           const addBook = async () => {
             const object = await this.load.gltf('book')
@@ -114,6 +166,8 @@
                 }
               }
             })
+
+
           }
           const addMan = async () => {
             const object = await this.load.gltf('man')
@@ -124,7 +178,7 @@
             this.man.rotateY(Math.PI + 0.1) // a hack
             this.man.add(man)
             this.man.rotation.set(0, Math.PI * 1.5, 0)
-            this.man.position.set(35, 0, 0)
+            this.man.position.set(0, 20, 0)
             // add shadow
             this.man.traverse(child => {
               if (child.isMesh) {
@@ -187,7 +241,8 @@
             }
           }
 
-          addBook()
+   //       addBook()
+         // addTown()
           addMan()
 
           /**
