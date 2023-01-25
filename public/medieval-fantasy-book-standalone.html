@@ -10,9 +10,10 @@
     <title>Medieval Fantasy Book</title>
   <!--  <link rel="stylesheet" href="/css/examples.css?ver=1.0.0" />
     <script src="/js/examples.js?ver=1.1.1"></script>-->
+    <script src="/js/city-builder.js"></script>
     <script src="/js/stats-survivor.js"></script>
+
     <script src="/js/enable3d.framework.0.25.3.min.js"></script>
-    
     <link rel="stylesheet" href="css/style.css">
   </head>
 
@@ -51,13 +52,9 @@
         }
 
         async preload() {
-          /**
-           * Medieval Fantasy Book by Pixel (https://sketchfab.com/stefan.lengyel1)
-           * https://sketchfab.com/3d-models/medieval-fantasy-book-06d5a80a04fc4c5ab552759e9a97d91a
-           * Attribution 4.0 International (CC BY 4.0)
-           */
-          const book = this.load.preload('book', '/assets/glb/book.glb')
-          const town = this.load.preload('town', '/assets/glb/town.glb')
+        
+          const house = this.load.preload('house', '/assets/glb/house.glb')
+
           /**
            * box_man.glb by Jan Bláha
            * https://github.com/swift502/Sketchbook
@@ -65,7 +62,7 @@
            */
           const man = this.load.preload('man', '/assets/glb/box_man.glb')
 
-          await Promise.all([town, man])
+          await Promise.all([house, man])
         }
 
         async create() {
@@ -85,11 +82,11 @@
 
           
           // this.physics.debug.enable()
-          this.load.texture('/assets/heightmap/heightmap-island-2.png').then(heightmap => {
+          this.load.texture('/assets/heightmap/heightmap-simple-plane-0.png').then(heightmap => {
             const mesh = this.heightMap.add(heightmap)
             if(mesh){
               mesh.material = new THREE.MeshPhongMaterial({map: grass})
-              mesh.scale.set(60, 60, 20)
+              mesh.scale.set(100, 100, 1) //esta en decenas de metro, (1 = 10m) (0.1 = 1m) 
 
 
               mesh.castShadow = mesh.receiveShadow = false
@@ -100,27 +97,42 @@
               mesh.position.set(0, 0, 0)
             }
           })
-        
-      
-          const addTown = async () => {
-            const object = await this.load.gltf('town')
+
+
+          const map = 
+          [
+              ['h','h','h','h', 'h', 'h', 'h', 'h', 'h','h','h','h', 'h', 'h', 'h', 'h', 'h','h','h','h', 'h', 'h', 'h', 'h']
+              
+          ]
+          var _this = this
+
+
+
+          createCity(map, _this)
+
+      /*
+          const addhouse = async () => {
+            const object = await this.load.gltf('house')
             const scene = object.scenes[0]
 
-            const town = new ExtendedObject3D()
-            town.name = 'town'
-            town.add(scene)
-            this.add.existing(town)
+            const house = new ExtendedObject3D()
+            house.name = 'house'
 
-            town.traverse(child => {
+            
+            house.add(scene)
+              house.position.set(0, 1, 0)
+              this.add.existing(house)
+
+            house.traverse(child => {
               if(child.isMesh){
                 child.castShadow = child.receiveShadow = false
                 child.material.metalness = 0
                 child.material.roughness = 1
 
-                if(/scene/i.test(child.name)){
+                if(/House/i.test(child.name)){
                   this.physics.add.existing(child, {
                     shape: 'concave',
-                    mass: 0,
+                    mass: 10,
                     collisionFlags: 1,
                     autoCenter: false
                   })
@@ -129,10 +141,12 @@
                 }
               }
             })
-            this.town.position.set(0, 10, 0)
 
+            let bbox = new THREE.Box3().setFromObject(scene);
+            let size = bbox.getSize(new THREE.Vector3()); // HEREyou get the size
+            //console.log(size)
           }
-
+*/
           
           const addMan = async () => {
             const object = await this.load.gltf('man')
@@ -143,7 +157,7 @@
             this.man.rotateY(Math.PI + 0.1) // a hack
             this.man.add(man)
             this.man.rotation.set(0, Math.PI * 1.5, 0)
-            this.man.position.set(0, 20, 0)
+            this.man.position.set(10, 1, 50)
             // add shadow
             this.man.traverse(child => {
               if (child.isMesh) {
@@ -206,7 +220,7 @@
 
           }
               var test = new stats_survival('a1',opt)
-                  test.stats_run()
+       //           test.stats_run()
 
 ////////////////////////////////////
 
@@ -241,9 +255,10 @@
               })
             }
           }
-
-   //       addBook()
-         // addTown()
+            
+          
+          
+          //addhouse()
           addMan()
 
           /**
