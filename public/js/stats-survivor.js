@@ -1,10 +1,13 @@
 class stats_survival {
+
     constructor(id,opt)
     {
         this.hunger_level = 10
         this.id = id
         this.opt = opt
+    
     }
+
     stats_run(){
 
 
@@ -46,7 +49,8 @@ class stats_survival {
 
             
         }, 1000);*/
-    } 
+    }
+
     create_ui(id){
         
         var div_stat = document.createElement('div');
@@ -58,6 +62,7 @@ class stats_survival {
         var div_stat =   document.getElementById(id)
         div_stat.innerText = value
     }
+    
 }
 
 

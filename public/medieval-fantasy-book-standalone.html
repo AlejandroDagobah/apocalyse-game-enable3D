@@ -62,7 +62,7 @@
            * https://github.com/swift502/Sketchbook
            * CC-0 license 2018
            */
-          const man = this.load.preload('man', '/assets/glb/box_man.glb')
+          const man = this.load.preload('man', '/assets/glb/test-character.glb')
 
           await Promise.all([house, man])
         }
@@ -178,7 +178,7 @@
                 this.man.animation.add(animation.name, animation)
               }
             })
-            this.man.animation.play('idle')
+            this.man.animation.play('Idle')
 
             /**
              * Add the player to the scene with a body
@@ -333,7 +333,7 @@
           this.man.animation.play('jump_running', 500, false)
           setTimeout(() => {
             this.canJump = true
-            this.man.animation.play('idle')
+            this.man.animation.play('Idle')
           }, 650)
           this.man.body.applyForceY(6)
         }
@@ -370,7 +370,7 @@
              * Player Move
              */
             if (this.keys.w.isDown || this.move) {
-              if (this.man.animation.current === 'idle' && this.canJump) this.man.animation.play('run')
+              if (this.man.animation.current === 'Idle' && this.canJump) this.man.animation.play('Running')
 
               const x = Math.sin(theta) * speed,
                 y = this.man.body.velocity.y,
@@ -378,7 +378,7 @@
 
               this.man.body.setVelocity(x, y, z)
             } else {
-              if (this.man.animation.current === 'run' && this.canJump) this.man.animation.play('idle')
+              if (this.man.animation.current === 'Running' && this.canJump) this.man.animation.play('Idle')
             }
 
             /**
