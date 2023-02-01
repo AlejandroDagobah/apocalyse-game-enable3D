@@ -108,9 +108,10 @@ var builder = {
           
         }
 
-        for (const item in list) {
+        /*for (const item in list) {
           _this.physics.add.constraints.lock(primal, item)
         }
+        */
 
     }
 }
