@@ -53,8 +53,8 @@
 
         async preload() {
         
-          const house = this.load.preload('house', '/assets/glb/house.glb')
-          const tree = this.load.preload('tree', '/assets/glb/Env_Tree_01.glb')
+          const house = this.load.preload('house', '/assets/glb/scene/house.glb')
+          const tree = this.load.preload('tree', '/assets/glb/enviroment/Env_Tree_01.glb')
 
           
           /**
@@ -62,7 +62,7 @@
            * https://github.com/swift502/Sketchbook
            * CC-0 license 2018
            */
-          const man = this.load.preload('man', '/assets/glb/character-animated.glb')
+          const man = this.load.preload('man', '/assets/glb/characters/character-animated.glb')
 
           await Promise.all([house, man])
         }
@@ -103,10 +103,12 @@
 
           const map =
           [
-              ['h', 'h', 'h', 'h','h', 'h', 'h', 'h','h', 'h', 'h', 'h','h', 'h', 'h', 'h','h', 'h', 'h', 'h']
+            ['home_1', 'home_2', 'home_1', 'home_2', 'home_1', 'home_2' ],
+            ['home_2', 'home_1', 'home_2', 'home_1', 'home_2', 'home_1'],
+            ['home_1', 'home_2', 'home_1', 'home_2', 'home_1', 'home_2' ]
           ]
-
-
+          
+            
           var _this = this
 
           createCity(map, _this)
