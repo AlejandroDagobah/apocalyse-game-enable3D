@@ -1,5 +1,6 @@
 const loadAllModels = async function(_this) {
   const _house = await _this.load.gltf('house')
+  const _burnedHouse = await _this.load.gltf('burned-house')
   const _tree = await _this.load.gltf('tree')
 
   return {
@@ -40,7 +41,6 @@ async function modelInit(models3D, _this, nameModel, block, id, size) {
       }
     }
   })
-  console.log("ModelInit", nameModel, object.position)
 
   return object
 

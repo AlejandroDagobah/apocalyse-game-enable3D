@@ -54,6 +54,7 @@
         async preload() {
         
           const house = this.load.preload('house', '/assets/glb/scene/house.glb')
+          const burnedHouse = this.load.preload('burned-house', '/assets/glb/scene/burned-house.glb')
           const tree = this.load.preload('tree', '/assets/glb/enviroment/Env_Tree_01.glb')
 
           
@@ -62,7 +63,8 @@
            * https://github.com/swift502/Sketchbook
            * CC-0 license 2018
            */
-          const man = this.load.preload('man', '/assets/glb/characters/character-animated.glb')
+          const man = this.load.preload('man', '/assets/glb/characters/survivor-polygon.glb')
+          const zombie = this.load.preload('zombie', '/assets/glb/characters/zombie-polygon.glb')
 
           await Promise.all([house, man])
         }
@@ -151,6 +153,59 @@
           }
 */
           
+          const addZombie = async () => {
+            const object = await this.load.gltf('zombie')
+            const zombieMesh = object.scene.children[0]
+            
+            this.zombie = new ExtendedObject3D()
+            this.zombie.name = 'zombie'
+            this.zombie.add(zombieMesh)
+            this.zombie.rotation.set(0, Math.PI * 1.5, 0)
+            this.zombie.position.set(5, 1, 14)
+
+        
+            
+            this.zombie.traverse(child => {
+              if (child.isMesh) {
+                child.castShadow = child.receiveShadow = false
+                // https://discourse.threejs.org/t/cant-export-material-from-blender-gltf/12258
+                child.material.roughness = 1
+                child.material.metalness = 0
+              }
+            })
+
+            this.animationMixers.add(this.zombie.animation.mixer)
+            object.animations.forEach(animation => {
+              if (animation.name) {
+                this.zombie.animation.add(animation.name, animation)
+              }
+            })
+
+            this.zombie.animation.play('idle_root')
+            this.zombie.animation.play('idle_mesh')
+
+            /**
+             * Add the player to the scene with a body
+             */
+            this.add.existing(this.zombie)
+            this.physics.add.existing(this.zombie, {
+              shape: 'sphere',
+              radius: 0.25,
+              width: 0.5,
+              offset: { y: -0.25 }
+            })
+
+            
+            this.zombie.body.setFriction(0.8)
+            this.zombie.body.setAngularFactor(0, 0, 0)
+
+            // https://docs.panda3d.org/1.10/python/programming/physics/bullet/ccd
+            this.zombie.body.setCcdMotionThreshold(1e-7)
+            this.zombie.body.setCcdSweptSphereRadius(0.25)
+
+          }
+
+
           const addMan = async () => {
             const object = await this.load.gltf('man')
             const man = object.scene.children[0]
@@ -215,15 +270,15 @@
                   },
                   0:function()
                   {
-               
-                    this_.man.animation.play('driving')
+                    //TODO: Añadir animación de muerte
+                    this_.man.animation.play('jumping')
                   }
               }
             }
 
           }
               var test = new stats_survival('a1',opt)
-       //           test.stats_run()
+              //test.stats_run()
 
 ////////////////////////////////////
 
@@ -257,13 +312,17 @@
                 }
               })
             }
+
           }
             
           
           
           //addhouse()
           addMan()
+          addZombie()
 
+          
+          
           /**
            * Add Keys
            */
@@ -393,9 +452,26 @@
 
             
             }
+
+
+            // this.zombie.rotation.set(0, Math.PI * 1.5, 0)
+ 
+            if (this.zombie) {
+              console.log(this.man.position)
+              console.log(this.zombie.position)
+
+              
+            }
+
         
           }
         }
+      }
+
+      function getHipotenuse(ca, co) {
+
+        return Math.pow()
+        
       }
 
       window.addEventListener('load', () => {
