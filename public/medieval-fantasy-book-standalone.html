@@ -215,7 +215,7 @@
             this.man.rotateY(Math.PI + 0.1) // a hack
             this.man.add(man)
             this.man.rotation.set(0, Math.PI * 1.5, 0)
-            this.man.position.set(5, 1, 14)
+            this.man.position.set(8, 1, 14)
             // add shadow
             this.man.traverse(child => {
               if (child.isMesh) {
@@ -415,6 +415,10 @@
 
             const rotation = this.camera.getWorldDirection(v3)
             const theta = Math.atan2(rotation.x, rotation.z)
+
+            console.log(rotation.x)
+
+
             const rotationMan = this.man.getWorldDirection(v3)
             const thetaMan = Math.atan2(rotationMan.x, rotationMan.z)
             this.man.body.setAngularVelocityY(0)
@@ -457,10 +461,22 @@
             // this.zombie.rotation.set(0, Math.PI * 1.5, 0)
  
             if (this.zombie) {
-              console.log(this.man.position)
-              console.log(this.zombie.position)
-
+              const zombie = this.zombie
+              const man = this.man
               
+              const marginZ = zombie.position.z - man.position.z
+              const marginX = zombie.position.x - man.position.x
+           
+              const radians = Math.atan2(marginX, marginZ)
+
+              const degrees = radians * 180 / Math.PI
+
+              if(this.zombie.rotation.y != radians){
+                this.zombie.body.setAngularVelocityY(2)
+
+              }
+
+
             }
 
         
