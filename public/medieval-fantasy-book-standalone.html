@@ -416,14 +416,13 @@
             const rotation = this.camera.getWorldDirection(v3)
             const theta = Math.atan2(rotation.x, rotation.z)
 
-            console.log(rotation.x)
-
 
             const rotationMan = this.man.getWorldDirection(v3)
             const thetaMan = Math.atan2(rotationMan.x, rotationMan.z)
             this.man.body.setAngularVelocityY(0)
 
             const l = Math.abs(theta - thetaMan)
+
             let rotationSpeed = isTouchDevice ? 2 : 4
             let d = Math.PI / 24
 
@@ -467,14 +466,24 @@
               const marginZ = zombie.position.z - man.position.z
               const marginX = zombie.position.x - man.position.x
            
-              const radians = Math.atan2(marginX, marginZ)
+              const theta = Math.atan2(marginX, marginZ)
+              const degrees = theta * 180 / Math.PI
+              const thetaAbsolute = Math.abs(theta)
+              const zombieRotation = this.zombie.rotation.y
+              let rotationSpeed;
 
-              const degrees = radians * 180 / Math.PI
+              //console.log(zombieRotation, thetaAbsolute)
 
-              if(this.zombie.rotation.y != radians){
-                this.zombie.body.setAngularVelocityY(2)
+              if(zombieRotation >= thetaAbsolute)
+              {
+                rotationSpeed = 0;
 
+              }else{
+                rotationSpeed = 0.1;
+                //this.zombie.rotation.y
               }
+              this.zombie.body.setAngularVelocityY(rotationSpeed)
+              console.log("es mayor la rotación del zombie", zombieRotation, thetaAbsolute);
 
 
             }
